@@ -13,10 +13,10 @@ parser.add_argument('-p','--sport', type=int, help="Starting port")
 parser.add_argument('-P', '--fport', type=int, help="Finishing port")
 args = parser.parse_args()
 
-def scan_ports(ip:int) -> None:
+def scan_ports(port:int) -> None:
     try:
-            targetIP = socket.gethostbyname(args.target + '.{}'.format(ip))
-            for port in range(0, 1000):
+            for ip in range(1,256):
+                targetIP = socket.gethostbyname(args.target + '.{}'.format(ip))
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.settimeout(0.2)
                 if sock.connect_ex((targetIP, port))==0:
@@ -34,9 +34,9 @@ def scan_ports(ip:int) -> None:
 
 
 start_time=datetime.now()
-
-with ThreadPoolExecutor(max_workers=100) as pool:
-    pool.map(scan_ports, range(1, 256))
+#for 1000 ports
+with ThreadPoolExecutor(max_workers=1000) as pool:
+    pool.map(scan_ports, range(1, 1000))
 finish_time=datetime.now()
 
 
